@@ -6,7 +6,7 @@ function pmsbMain(){
 	var form = document.getElementById("myForm");
 
 	var time = 0;
-	var speed = 2;
+	var speed = 60;
 	form.speed.value = speed;
 	c = theCanvas.getContext("2d");
 	c.fillStyle = "blue";
@@ -16,9 +16,7 @@ function pmsbMain(){
 		console.log(speed);
 	};
 
-	var bezveze = new Vec2(10,10);
 
-	console.log(bezveze.x+ ' Y: ' + bezveze.y);
 
 	var simulation = new MODEL.Simulation(theCanvas.width, theCanvas.height);
 	simulation.start();
@@ -26,7 +24,7 @@ function pmsbMain(){
 	var render = function(timestamp){
 		c.clearRect(0,0, theCanvas.width, theCanvas.height);
 
-		simulation.iterate(1/20);
+		simulation.iterate(1/speed);
 		var particles = simulation.getParticles();
 
 		particles.forEach(function(e){
