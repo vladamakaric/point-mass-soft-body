@@ -1,16 +1,48 @@
-var theCanvas = document.getElementById("myCanvas");
-var time = 0;
-c = theCanvas.getContext("2d");
-c.fillStyle = "blue";
+window.onload = pmsbMain;
 
-var render = function(timestamp){
-	c.clearRect(0,0, theCanvas.width, theCanvas.height);
-	var x=time;
-	var y=0;
+function pmsbMain(){
 
-	c.fillRect(x,y,100,200);
-	time+=1;
+	var theCanvas = document.getElementById("myCanvas");
+	var form = document.getElementById("myForm");
+
+	var time = 0;
+	var speed = 2;
+	form.speed.value = speed;
+	c = theCanvas.getContext("2d");
+	c.fillStyle = "blue";
+
+	form.speed.onchange = function(){
+		speed = parseInt(form.speed.value);
+		console.log(speed);
+	};
+
+	var bezveze = new Vec2(10,10);
+
+	console.log(bezveze.x+ ' Y: ' + bezveze.y);
+
+	var simulation = new MODEL.Simulation(theCanvas.width, theCanvas.height);
+	simulation.start();
+
+	var render = function(timestamp){
+		c.clearRect(0,0, theCanvas.width, theCanvas.height);
+
+		simulation.iterate(1/20);
+		var particles = simulation.getParticles();
+
+		particles.forEach(function(e){
+
+      c.beginPath();
+      c.arc(e.position.x, e.position.y, 2, 0, 2 * Math.PI, false);
+      c.fillStyle = 'green';
+      c.fill();
+
+		});
+
+
+	//	console.log(time);
+		window.requestAnimationFrame(render);
+	}
 	window.requestAnimationFrame(render);
 }
 
-window.requestAnimationFrame(render);
+
