@@ -1,6 +1,8 @@
 var MODEL = (function(pi) { 
 
 	pi.SpringFG = function (particleA, particleB ,ek, dk, restDist) {
+		this.elasticKoef = ek;
+		this.dampingKoef = dk;
 
 		if(!restDist){
 			var aToB = particleB.position.subV(particleA.position);	
@@ -16,14 +18,14 @@ var MODEL = (function(pi) {
 	
 			aToB.normalize();
 			
-			var forceOnADueToEK = aToB.mulS(dx*ek);
+			var forceOnADueToEK = aToB.mulS(dx*this.elasticKoef);
 
 			var velOfAProjToSpring = aToB.dot(particleA.velocity);	
 			var velOfBProjToSpring = aToB.dot(particleB.velocity);	
 
 			var dv = velOfAProjToSpring- velOfBProjToSpring;
 
-			var forceOnADueToDK = aToB.mulS(-dv);
+			var forceOnADueToDK = aToB.mulS(-dv*this.dampingKoef);
 
 			var forceOnA = forceOnADueToEK.addV(forceOnADueToDK);
 
@@ -37,10 +39,8 @@ var MODEL = (function(pi) {
 	  var particles = particleArray;
 	  this.applyForce = function(){
 		  particles.forEach(function(e){
-
 			  	var gravityForce = gravityAcc.mulS(e.invMass);
 				e.addForce(gravityForce);
-
 		  });
 	  }
 	}

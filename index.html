@@ -11,10 +11,10 @@
 			<form id="myForm">
 				<div>
 					<div>
-						 <button type="button" >Toggle Pause</button>
+						 <button type="button" name = "togglePause" >Toggle Pause</button>
 					</div>
 					<div>
-						 <button type="button" >Reset shape</button>
+						 <button type="button" name = "resetShape" >Reset shape</button>
 					</div>
 					<div>
 						Shape:
@@ -50,19 +50,21 @@
 					<div>
 						Steps per second:
 						<br>
-						<input type="range" name="speed" min="1" max="100">	
+						<input type="range" name="sps" min="1" max="100">	
 					</div>	
 				</div>
 				<div>
 					Click behavior:
-					<input type="radio" name="clickAction" value="pos" checked>Change position
-					<input type="radio" name="clickAction" value="force">Apply force
+					<input type="radio" name="clickAction" value="pos" id = 'rbPos' >Change position
+					<input type="radio" name="clickAction" value="force" id = 'rbForce' >Apply force
 				</div>
 		</div>
 		<script src="TS_vector2.js"></script>
 		<script src="particle.js"></script>
 		<script src="forceGenerators.js"></script>
 		<script src="simulation.js"></script>
+		<script src="draw.js"></script>
+		<script src="viewController.js"></script>
 		<script src="main.js"></script>
 
 	</body>
