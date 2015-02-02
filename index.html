@@ -1,18 +1,39 @@
 <html>
 	<head>
+		<LINK href="style.css" rel="stylesheet" type="text/css">
 		<title>Hello Canvas!</title>
 	</head>
 	<body style="margin: 0px;">
-		<canvas id ="myCanvas"
-		width ="500" height="300"></canvas>
+		<div id="center">
+			<canvas id ="myCanvas"
+			width ="600" height="300"></canvas>
 
-		<form id = "myForm">
-		Speed:
-		<br>
-			<input type="number" name="speed">
-		<br>
-		</form> 
+			<form id = "myForm">
 
+				<div id = "firstRow">
+					<div>
+						 <button type="button" >Toggle Pause</button>
+					</div>
+					<div>
+					Steps per second:
+					<br>
+						<input type="number" name="speed">
+					<br>
+					</div>	
+					<div>
+					Integrator:
+					<br>
+<select name="intgr">
+<option value="1">Euler</option>
+<option value="2">RK2</option>
+<option value="3">RK4</option>
+</select>
+
+					</div>
+				</div>
+
+			</form> 
+		</div>
 		<script src="TS_vector2.js"></script>
 		<script src="particle.js"></script>
 		<script src="forceGenerators.js"></script>
