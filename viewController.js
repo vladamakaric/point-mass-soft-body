@@ -1,4 +1,5 @@
 var ViewController = function(){
+
 	var theCanvas; 
 	var form; 
 	var c;
@@ -10,7 +11,7 @@ var ViewController = function(){
 
 	var minSPS = 1;
 	var maxSPS = 100;
-	var stepsPerSecond = 50;
+	var stepsPerSecond = 30;
 
 	var elasticKoef = 500;
 	var dampingKoef = 500;
@@ -20,6 +21,7 @@ var ViewController = function(){
 	var resetShape = false;
 	var mouseClick = false;
 
+	var mousePressed = false;
 	var moveParticles = true;
 
 	var mousePosition=new Vec2(0,0);
@@ -63,27 +65,37 @@ var ViewController = function(){
 		function mouseMove(event){
 		  var x = event.clientX;
 		  var y = event.clientY;
-
 		  x -= theCanvas.offsetLeft;
 		  y -= theCanvas.offsetTop;
 
 		  mousePosition = new Vec2(x,y);
 		}
 
+		function mouseDown(event){
+			mousePressed = true;
+
+
+		}
+		function mouseUp(event){
+			mousePressed = false;
+		}
+
 		theCanvas.addEventListener("click", mouseClickEH, false);
 		theCanvas.addEventListener("mousemove", mouseMove, false);
-		form.sps.onchange = function(){
+		theCanvas.addEventListener("mousedown", mouseDown, false);
+		theCanvas.addEventListener("mouseup", mouseUp, false);
+		theCanvas.addEventListener ("mouseout", mouseUp, false);
+		form.sps.oninput = function(){
 			stepsPerSecond = form.sps.value;
 		}
 		
-		form.dk.onchange = function(){
+		form.dk.oninput = function(){
 			dampingKoef = form.dk.value;
 			simUpdate = true;
 		}
 
-		form.ek.onchange = function(){
+		form.ek.oninput = function(){
 			elasticKoef = form.ek.value;
-			console.log(elasticKoef);
 			simUpdate = true;
 		}
 		form.resetShape.onclick = function(){
@@ -101,9 +113,7 @@ var ViewController = function(){
 			resetShape = true;
 			simUpdate = true;
 		}
-
 	}
-
 
 	var updateSimulation=function(){
 
@@ -112,10 +122,8 @@ var ViewController = function(){
 			if(moveParticles){
 				simulation.moveParticles(mousePosition);
 			}
-			else{
-				simulation.applyForceToShape(mousePosition);
-			}
 		}
+
 
 		if(resetShape){
 			resetShape = false;
@@ -146,15 +154,11 @@ var ViewController = function(){
 			simUpdate = false;
 		}
 
+		if(mousePressed && !moveParticles){
+			var force = mousePosition.subV(simulation.getParticlesCM());
+			simulation.applyForceToShape(force);
+		}
 		simulation.iterate(1/stepsPerSecond);
-		var particles = simulation.getParticles();
-
-		particles.forEach(function(e){
-			c.beginPath();
-			c.arc(e.position.x, e.position.y, 2, 0, 2 * Math.PI, false);
-			c.fillStyle = 'green';
-			c.fill();
-		});
 
 		var  penvlp= simulation.getParticleEnvelope();
 
@@ -165,12 +169,14 @@ var ViewController = function(){
 		}
 		c.lineTo(penvlp[0].position.x, penvlp[0].position.y); 
 
-
-
-		c.strokeStyle = '#004400';
+		c.strokeStyle = '#44C400';
 		c.lineWidth = 3;
 		c.stroke();
 
+		
+		c.strokeStyle = '#F35434';
+		c.fillStyle='#F35434';
+		if(!moveParticles && mousePressed)
 		DRAW.drawArrow(c,simulation.getParticlesCM(),mousePosition,true);
 	}
 

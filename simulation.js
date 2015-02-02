@@ -76,7 +76,6 @@ var MODEL = (function(pi) {
 					e.elasticKoef *= elasticM;
 					e.dampingKoef *= dampingM;
 
-					console.log('ek = ', e.elasticKoef);
 					e.applyForce();
 
 					e.elasticKoef = oldEK;
@@ -134,7 +133,6 @@ var MODEL = (function(pi) {
 			var positions = [ new Vec2(-50,-50), new Vec2(50,-50), 
 							  new Vec2(50,50), new Vec2(-50,50)];
 
-
 			particles = [new MODEL.Particle(1,positions[0]), 
 					  	new MODEL.Particle(1,positions[1]),	 
 					  	new MODEL.Particle(1,positions[2]),	 
@@ -147,7 +145,6 @@ var MODEL = (function(pi) {
 				for(var j = i+1; j<particles.length; j++){
 					forceGenerators[forceGenerators.length] = new MODEL.SpringFG(
 							particles[i], particles[j], 2, 2);
-
 				}
 			}
 
@@ -158,28 +155,35 @@ var MODEL = (function(pi) {
 		var collisionDetection = function(){
 			particles.forEach(function(e){
 
-				var frictionK = 0.95;
+				var collisionFriction = 0.95;
+				
+				var slidingFriction = 0.97;
+				
 				if(e.position.y > height){
 					e.position.y = height;
-					e.velocity.y *=-1*frictionK; 
+					e.velocity.y *=-1*collisionFriction; 
+				
+					e.velocity.x *= slidingFriction;
 				}
 
 				if(e.position.y < 0){
 					e.position.y = 0;
-					e.velocity.y *=-1*frictionK; 
+					e.velocity.y *=-1*collisionFriction; 
+					e.velocity.x *= slidingFriction;
 				}
 
 				if(e.position.x > width){
 					e.position.x = width;
-					e.velocity.x *=-1*frictionK; 
+					e.velocity.x *=-1*collisionFriction; 
+					e.velocity.y *= slidingFriction;
 				}
 
 				if(e.position.x < 0){
 					e.position.x = 0;
-					e.velocity.x *=-1*frictionK; 
+					e.velocity.x *=-1*collisionFriction; 
+					e.velocity.y *= slidingFriction;
 				}
 			});
-
 		}
 	}
 

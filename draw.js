@@ -1,4 +1,3 @@
-//element.addEventListener ("mouseout", myFunction, false);
 var DRAW = (function () {
 
 	function drawArrow(ctx,fromPoint,toPoint,stroked){
@@ -18,7 +17,6 @@ var DRAW = (function () {
 		var arrowPoint2 = new Vec2(
 			(toPoint.x - unitDx * arrowHeadSize + unitDy * arrowHeadSize),
 			(toPoint.y - unitDy * arrowHeadSize - unitDx * arrowHeadSize));
-		ctx.fillStyle = "rgba(100, 0, 200, 0.5)";
 		// Drawing Arrow Line.
 		ctx.beginPath();
 		ctx.moveTo(fromPoint.x,fromPoint.y);
@@ -26,6 +24,7 @@ var DRAW = (function () {
 		ctx.closePath();
 		ctx.lineWidth = 3;
 		ctx.stroke();
+
 		if(stroked)
 		strokeArrowHead(ctx,toPoint,arrowPoint1,arrowPoint2);
 		else
@@ -38,7 +37,6 @@ var DRAW = (function () {
 		ctx.lineTo(arrowPoint1.x,arrowPoint1.y);
 		ctx.lineTo(arrowPoint2.x,arrowPoint2.y);
 		ctx.lineTo(toPoint.x,toPoint.y);
-		ctx.fillStyle = 'black';
 		ctx.fill();
 		ctx.stroke();
 	}
