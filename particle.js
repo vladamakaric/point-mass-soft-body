@@ -18,6 +18,10 @@ var MODEL = (function(pi) {
 		this.resetForce=function(){
 			compoundForce.set(0,0);
 		}
+
+		this.clone = function(){
+			return new pi.Particle(this.invMass, this.position.clone(), this.velocity.clone()); 
+		}
 	}
 
 	return pi;

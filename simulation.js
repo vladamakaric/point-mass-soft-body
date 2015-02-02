@@ -15,10 +15,15 @@ var MODEL = (function(pi) {
 		var integrator;
 		var shapeCreator;
 
+		var integratorArray;
 		var shapeCreatorArray;
 
 		var self = this;
 
+
+		this.changeIntegrator = function(index){
+			integrator = integratorArray[(index-1)%integratorArray.length];
+		}
 		this.changeShapeCreator = function(index) {
 			
 			shapeCreator = shapeCreatorArray[(index-1)%shapeCreatorArray.length];
@@ -35,7 +40,7 @@ var MODEL = (function(pi) {
 		}
 
 		this.start = function(){
-			integrator = euler;
+			integrator = integratorArray[0];
 			shapeCreator = shapeCreatorArray[0];
 			running = true;
 			shapeCreator();
@@ -86,12 +91,39 @@ var MODEL = (function(pi) {
 			});
 		}
 		 
+		var getDeepParticlesCopy = function() {
+			var particles2 = particles.slice(0);
+			for(var i=0; i<particles2.length; i++){
+				particles2[i] = particles2[i].clone();
+			}
+			return particles2;
+		}
+
+		var RK2 = function(dt){
+			var t0particles = getDeepParticlesCopy();
+
+			applyForcesToAllParticles();
+
+			particles.forEach(function(p) {
+				p.position = p.position.addV(p.velocity.mulS(dt/2));
+				p.velocity = p.velocity.addV(p.getForce().mulS(p.invMass).mulS(dt/2));
+			});
+
+			applyForcesToAllParticles();
+
+			for(var i=0; i<particles.length; i++){
+				particles[i].position = t0particles[i].position.addV(particles[i].velocity.mulS(dt));
+				particles[i].velocity = t0particles[i].velocity.addV(
+						particles[i].getForce().mulS(particles[i].invMass).mulS(dt));
+			}
+		 }
+
 		var euler = function(dt){
 			applyForcesToAllParticles();
 
 			particles.forEach(function(p) {
 				p.position = p.position.addV(p.velocity.mulS(dt));
-				p.velocity = p.velocity.addV(p.getForce().mulS(dt).mulS(p.invMass));
+				p.velocity = p.velocity.addV(p.getForce().mulS(p.invMass).mulS(dt));
 			});
 		  }
 
@@ -129,6 +161,45 @@ var MODEL = (function(pi) {
 			});
 		}
 
+		var circle = function(){
+			var num = 14;
+			var dangle = Math.PI*2/num;
+			var r = 70;
+
+			var centerPcl =new MODEL.Particle(0.5, new Vec2(0,0)); 
+			particles = [centerPcl]; 
+
+			forceGenerators = [];
+			var prevPcl = null; 
+			for(var i=0; i<num; i++){
+				
+				var pcl = new MODEL.Particle(1,	new Vec2(
+					r*Math.cos(dangle*i),r*Math.sin(dangle*i)));
+
+				var springC = new MODEL.SpringFG(pcl, centerPcl,4,4);
+
+				particles.push(pcl);
+				forceGenerators.push(springC);
+
+				if(prevPcl!=null){
+					var spring = new MODEL.SpringFG(prevPcl, pcl, 8,2);
+					forceGenerators.push(spring);
+				}
+
+				prevPcl = pcl;
+			}
+			
+			var spring = new MODEL.SpringFG(particles[1], particles[num], 2,2);
+			forceGenerators.push(spring);
+		
+			moveParticleCM(new Vec2(width/2, height/2));
+		
+			var gravityFG = new MODEL.GravityFG(particles);
+			forceGenerators.push(gravityFG);
+
+			particleEnvelope = particles.slice(1,particles.length);
+		}
+
 		var square = function(){
 			var positions = [ new Vec2(-50,-50), new Vec2(50,-50), 
 							  new Vec2(50,50), new Vec2(-50,50)];
@@ -151,7 +222,8 @@ var MODEL = (function(pi) {
 			particleEnvelope = particles;
 		}
 
-		shapeCreatorArray = [square, square, shapeC1];
+		shapeCreatorArray = [square, circle, shapeC1];
+		integratorArray = [euler, RK2, RK2];
 		var collisionDetection = function(){
 			particles.forEach(function(e){
 
@@ -161,6 +233,7 @@ var MODEL = (function(pi) {
 				
 				if(e.position.y > height){
 					e.position.y = height;
+					if(e.velocity.y>0)
 					e.velocity.y *=-1*collisionFriction; 
 				
 					e.velocity.x *= slidingFriction;
@@ -168,18 +241,21 @@ var MODEL = (function(pi) {
 
 				if(e.position.y < 0){
 					e.position.y = 0;
+					if(e.velocity.y <0)
 					e.velocity.y *=-1*collisionFriction; 
 					e.velocity.x *= slidingFriction;
 				}
 
 				if(e.position.x > width){
 					e.position.x = width;
+					if(e.velocity.x >0)
 					e.velocity.x *=-1*collisionFriction; 
 					e.velocity.y *= slidingFriction;
 				}
 
 				if(e.position.x < 0){
 					e.position.x = 0;
+					if(e.velocity.x <0)
 					e.velocity.x *=-1*collisionFriction; 
 					e.velocity.y *= slidingFriction;
 				}

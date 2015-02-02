@@ -45,6 +45,9 @@ function Vec2(x_,y_)
 						 this.y+(vec_.y-this.y)*value 
 						); 
 	}
+	this.clone = function(){
+		return new Vec2(this.x,this.y);
+	}
 	/* normalize THIS vector */
 	this.normalize	= function() {
 		var vlen   = this.length();

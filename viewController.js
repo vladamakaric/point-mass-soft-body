@@ -45,6 +45,8 @@ var ViewController = function(){
 		form.ek.value = elasticKoef;
 		form.clickAction.value = 'pos';
 		
+		form.shapeSelect.value = '1';
+		form.intgr.value = '1';
 		var onRadioGroupChange = function (){
 			if(form.clickAction.value === 'pos')
 				moveParticles = true;
@@ -106,6 +108,10 @@ var ViewController = function(){
 		form.togglePause.onclick = function(){
 			togglePause = true;
 			simUpdate = true;
+		}
+
+		form.intgr.onchange = function() {
+			simulation.changeIntegrator(parseInt(form.intgr.value));
 		}
 
 		form.shapeSelect.onchange = function(){
