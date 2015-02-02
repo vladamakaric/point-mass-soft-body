@@ -22,7 +22,7 @@ var ViewController = function(){
 	var mouseClick = false;
 
 	var mousePressed = false;
-	var moveParticles = true;
+	var moveParticles = false;
 
 	var mousePosition=new Vec2(0,0);
 
@@ -43,7 +43,7 @@ var ViewController = function(){
 		form.sps.value = stepsPerSecond;
 		form.dk.value = dampingKoef;
 		form.ek.value = elasticKoef;
-		form.clickAction.value = 'pos';
+		form.clickAction.value = 'force';
 		
 		form.shapeSelect.value = '1';
 		form.intgr.value = '1';

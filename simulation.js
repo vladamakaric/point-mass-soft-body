@@ -1,7 +1,6 @@
 var MODEL = (function(pi) { 
 
 	pi.Simulation = function(width,height){
-
 		var running = false;
 		var particleEnvelope = null;
 		var innerSpringPairs = null;
@@ -19,7 +18,6 @@ var MODEL = (function(pi) {
 		var shapeCreatorArray;
 
 		var self = this;
-
 
 		this.changeIntegrator = function(index){
 			integrator = integratorArray[(index-1)%integratorArray.length];
@@ -118,6 +116,56 @@ var MODEL = (function(pi) {
 			}
 		 }
 
+		var RK4 = function(dt){
+
+			var t0Particles = getDeepParticlesCopy();	
+
+			function addK(k,koef){
+				for(var i=0; i<particles.length; i++){
+					particles[i].position = t0Particles[i].position.addV(k.v[i].mulS(dt*koef));
+					particles[i].velocity = t0Particles[i].velocity.addV(k.a[i].mulS(dt*koef));
+				}		
+			}
+
+			k1 = {v: [], a: []};
+			k2 = {v: [], a: []};
+			k3 = {v: [], a: []};
+			k4 = {v: [], a: []};
+			
+			applyForcesToAllParticles();
+			saveCurrentDerivs(k1);
+
+			addK(k1,1/2);
+
+			applyForcesToAllParticles();
+			saveCurrentDerivs(k2);
+			
+			addK(k2,1/2);
+
+			applyForcesToAllParticles();
+			saveCurrentDerivs(k3);
+
+			addK(k3,1);
+			
+			applyForcesToAllParticles();
+			saveCurrentDerivs(k4);
+				
+			for(var i=0; i<particles.length; i++){
+				var dv = k1.v[i].addV(k2.v[i].mulS(2).addV(k3.v[i].mulS(2).addV(k4.v[i]))).mulS(dt/6);
+				var da = k1.a[i].addV(k2.a[i].mulS(2).addV(k3.a[i].mulS(2).addV(k4.a[i]))).mulS(dt/6);
+
+				particles[i].position = t0Particles[i].position.addV(dv); 
+				particles[i].velocity = t0Particles[i].velocity.addV(da);
+			}
+		}
+
+		var saveCurrentDerivs = function(k) {
+			for(var i=0; i<particles.length; i++){
+				k.v[i] = particles[i].velocity;
+				k.a[i] = particles[i].getForce().mulS(particles[i].invMass);
+			}
+		}
+
 		var euler = function(dt){
 			applyForcesToAllParticles();
 
@@ -149,7 +197,6 @@ var MODEL = (function(pi) {
 
 			return cm;
 		}
-
 		
 		var moveParticleCM = function(newCMPosition) {
 			var cm = self.getParticlesCM();
@@ -223,7 +270,7 @@ var MODEL = (function(pi) {
 		}
 
 		shapeCreatorArray = [square, circle, shapeC1];
-		integratorArray = [euler, RK2, RK2];
+		integratorArray = [euler, RK2, RK4];
 		var collisionDetection = function(){
 			particles.forEach(function(e){
 
