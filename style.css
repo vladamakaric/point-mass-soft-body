@@ -5,37 +5,34 @@
 }
 
 #myCanvas {
-	border:solid 5px #e600e6;
+	border:solid 3px #8C9E96;
 	display: block;
-	margin: 0 auto;
+	margin: 15 auto;
 }
+
 button{
     height:40px; 
-    width:100px; 
-    margin: -20px -50px; 
-    position:relative;
-    top:50%; 
-    left:50%;
+	margin: 5px auto;
+    width:120px; 
 }
-/*
  
 #myForm {
-	width: 50%;
-	border:solid 2px #e600e6;
-	display: block;
-	margin: 0 auto;
+	padding: 10px;
 }
-*/
+
 form div{
-	width: 80%;
+	vertical-align: middle;
+	text-align: center;
+	height: 60px;
+	margin: 2 auto;
+}
+
+form div div {
+	padding: 0px 10px;
+	text-align: left;
 	height: 50px;
 	margin: 0 auto;
-}
-form div div {
-	width: 30%;
-	margin: 5px auto;
-	padding: 7px;
-	position: relative;
-	float: left;
+	width: auto;
+	display: inline-block;
 }
 

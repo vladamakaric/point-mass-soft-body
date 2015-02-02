@@ -8,31 +8,56 @@
 			<canvas id ="myCanvas"
 			width ="600" height="300"></canvas>
 
-			<form id = "myForm">
-
-				<div id = "firstRow">
+			<form id="myForm">
+				<div>
 					<div>
 						 <button type="button" >Toggle Pause</button>
 					</div>
 					<div>
-					Steps per second:
-					<br>
-						<input type="number" name="speed">
-					<br>
-					</div>	
+						 <button type="button" >Reset shape</button>
+					</div>
 					<div>
-					Integrator:
-					<br>
-<select name="intgr">
-<option value="1">Euler</option>
-<option value="2">RK2</option>
-<option value="3">RK4</option>
-</select>
-
+						Shape:
+						<br>
+						<select name="shapeSelect">
+						<option value="1">Square</option>
+						<option value="2">Triangle</option>
+						<option value="3">Star</option>
+						</select>
+					</div>
+					<div> 
+						Integrator:
+						<br>
+						<select name="intgr">
+						<option value="1">Euler</option>
+						<option value="2">RK2</option>
+						<option value="3">RK4</option>
+						</select>
 					</div>
 				</div>
+				<div>
+					<div>
+					  Elasticity:
+					  <br>
+				  	  <input type="range" name="ek" min="0" max="10">	
+					</div>
 
-			</form> 
+					<div>
+						Damping:
+						<br>
+						<input type="range" name="dk" min="0" max="10">	
+					</div>
+					<div>
+						Steps per second:
+						<br>
+						<input type="range" name="speed" min="1" max="100">	
+					</div>	
+				</div>
+				<div>
+					Click behavior:
+					<input type="radio" name="clickAction" value="pos" checked>Change position
+					<input type="radio" name="clickAction" value="force">Apply force
+				</div>
 		</div>
 		<script src="TS_vector2.js"></script>
 		<script src="particle.js"></script>
