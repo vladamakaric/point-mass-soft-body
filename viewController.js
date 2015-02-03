@@ -85,6 +85,10 @@ var ViewController = function(){
 		}
 
 		function mouseDown(event){
+			if(moveParticles){
+				mouseClick = true;
+				simUpdate = true;
+			}
 			mousePressed = true;
 			mouseMove(event);
 		}
@@ -95,8 +99,6 @@ var ViewController = function(){
 
 		function mouseUp(event){
 			mousePressed = false;
-			mouseClick = true;
-			simUpdate = true;
 		}
 	
 		function mouseOut(event){
@@ -167,7 +169,6 @@ var ViewController = function(){
 		}
 
 		if(togglePause){
-
 			togglePause = false;
 			simulation.togglePause();
 		}
