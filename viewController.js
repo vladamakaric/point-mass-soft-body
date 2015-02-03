@@ -91,6 +91,12 @@ var ViewController = function(){
 		}
 
 		function touchStart(event){
+			if(moveParticles){
+
+				mouseClick = true;
+				simUpdate = true;
+
+			}
 			mouseDown();
 		}
 		function mouseUp(event){
@@ -102,14 +108,14 @@ var ViewController = function(){
 		}
 
 		function mouseClickEH(event){
+			mouseDown = true;
 			mouseClick = true;	
 			simUpdate = true;
 			mouseMove(event);
 		}
 
-		theCanvas.addEventListener("touchmove", function(event) { event.preventDefault(); },false);
+		theCanvas.addEventListener("touchmove", function(event) { event.preventDefault(); mouseMove();},false);
 		theCanvas.addEventListener("touchstart",touchStart,false);
-		theCanvas.addEventListener("touchmove",mouseMove,false);
 		theCanvas.addEventListener("touchend",mouseUp,false);
 		theCanvas.addEventListener("click", mouseClickEH, false);
 		theCanvas.addEventListener("mousemove", mouseMove, false);
