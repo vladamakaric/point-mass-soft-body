@@ -24,6 +24,7 @@ var ViewController = function(){
 	var mousePressed = false;
 	var moveParticles = false;
 
+	var touches = [];
 	var mousePosition=new Vec2(0,0);
 
 	var init = function(){
@@ -33,6 +34,7 @@ var ViewController = function(){
 		setUIProperties();
 	}
 
+	
 	var setUIProperties = function(){
 		form.sps.max = maxSPS;
 		form.sps.max = maxSPS;
@@ -51,7 +53,14 @@ var ViewController = function(){
 				moveParticles = false;
 		}
 
-		
+		theCanvas.addEventListener('touchmove', function(event) {
+		  touches = event.touches;
+		}, false);
+
+		document.body.addEventListener('touchmove', function(event) {
+ 			 event.preventDefault();
+		}, false); 
+
 		document.getElementById('rbPos').onclick = onRadioGroupChange;
 		var rbForce =document.getElementById('rbForce');
 		rbForce.onclick = onRadioGroupChange;
@@ -162,6 +171,9 @@ var ViewController = function(){
 
 	this.render = function(){
 		c.clearRect(0,0, theCanvas.width, theCanvas.height);
+
+		if(touches.length>0)
+			alert(touches.x);
 
 		if(simUpdate === true){
 			updateSimulation();
