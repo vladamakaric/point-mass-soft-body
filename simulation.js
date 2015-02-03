@@ -23,7 +23,6 @@ var MODEL = (function(pi) {
 			integrator = integratorArray[(index-1)%integratorArray.length];
 		}
 		this.changeShapeCreator = function(index) {
-			
 			shapeCreator = shapeCreatorArray[(index-1)%shapeCreatorArray.length];
 		}
 
@@ -38,8 +37,6 @@ var MODEL = (function(pi) {
 		}
 
 		this.start = function(){
-			integrator = integratorArray[0];
-			shapeCreator = shapeCreatorArray[0];
 			running = true;
 			shapeCreator();
 		}
@@ -76,9 +73,11 @@ var MODEL = (function(pi) {
 					var oldEK = e.elasticKoef;
 					var oldDK = e.dampingKoef;
 
+
 					e.elasticKoef *= elasticM;
 					e.dampingKoef *= dampingM;
 
+					console.log('e' + e.elasticKoef + 'd' + e.dampingKoef);
 					e.applyForce();
 
 					e.elasticKoef = oldEK;
@@ -213,30 +212,34 @@ var MODEL = (function(pi) {
 			var dangle = Math.PI*2/num;
 			var r = 70;
 
-			var centerPcl =new MODEL.Particle(0.5, new Vec2(0,0)); 
+			var centerPcl =new MODEL.Particle(0.2, new Vec2(0,0)); 
 			particles = [centerPcl]; 
 
 			forceGenerators = [];
 			var prevPcl = null; 
+			var dkfCenter = 10;
+			var ekfCenter = 222;
+			var dkfPerim = 7;
+			var ekfPerim = 370;
 			for(var i=0; i<num; i++){
 				
 				var pcl = new MODEL.Particle(1,	new Vec2(
 					r*Math.cos(dangle*i),r*Math.sin(dangle*i)));
 
-				var springC = new MODEL.SpringFG(pcl, centerPcl,4,4);
+				var springC = new MODEL.SpringFG(pcl, centerPcl,ekfCenter,dkfCenter);
 
 				particles.push(pcl);
 				forceGenerators.push(springC);
 
 				if(prevPcl!=null){
-					var spring = new MODEL.SpringFG(prevPcl, pcl, 8,2);
+					var spring = new MODEL.SpringFG(prevPcl, pcl, ekfPerim,dkfPerim);
 					forceGenerators.push(spring);
 				}
 
 				prevPcl = pcl;
 			}
 			
-			var spring = new MODEL.SpringFG(particles[1], particles[num], 2,2);
+			var spring = new MODEL.SpringFG(particles[1], particles[num], ekfPerim,dkfPerim);
 			forceGenerators.push(spring);
 		
 			moveParticleCM(new Vec2(width/2, height/2));
@@ -262,7 +265,7 @@ var MODEL = (function(pi) {
 			for(var i = 0; i<particles.length-1; i++){
 				for(var j = i+1; j<particles.length; j++){
 					forceGenerators[forceGenerators.length] = new MODEL.SpringFG(
-							particles[i], particles[j], 2, 2);
+							particles[i], particles[j], 15, 0.6);
 				}
 			}
 
@@ -271,12 +274,13 @@ var MODEL = (function(pi) {
 
 		shapeCreatorArray = [square, circle, shapeC1];
 		integratorArray = [euler, RK2, RK4];
+
 		var collisionDetection = function(){
 			particles.forEach(function(e){
 
 				var collisionFriction = 0.95;
 				
-				var slidingFriction = 0.97;
+				var slidingFriction = 0.94;
 				
 				if(e.position.y > height){
 					e.position.y = height;

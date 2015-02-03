@@ -45,8 +45,6 @@ var ViewController = function(){
 		form.ek.value = elasticKoef;
 		form.clickAction.value = 'force';
 		
-		form.shapeSelect.value = '1';
-		form.intgr.value = '1';
 		var onRadioGroupChange = function (){
 			if(form.clickAction.value === 'pos')
 				moveParticles = true;
@@ -150,7 +148,14 @@ var ViewController = function(){
 	this.getWidth = function() {return theCanvas.width; };
 	this.getHeight = function() {return theCanvas.height; };
 
-	this.setSimulation = function(simul) { simulation = simul; };
+	this.setSimulation = function(simul) { 
+		simulation = simul;
+
+		form.shapeSelect.value = '1';
+		form.intgr.value = '3';
+		simulation.changeIntegrator(3);
+		simulation.changeShapeCreator(1);
+	};
 
 	this.render = function(){
 		c.clearRect(0,0, theCanvas.width, theCanvas.height);
