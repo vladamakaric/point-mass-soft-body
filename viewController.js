@@ -26,6 +26,7 @@ var ViewController = function(){
 	var touches = [];
 	var mousePosition=new Vec2(0,0);
 
+	var lastDropPos;
 	var init = function(){
 		form = document.getElementById("myForm");
 		theCanvas = document.getElementById("myCanvas");
@@ -87,16 +88,10 @@ var ViewController = function(){
 		function mouseDown(event){
 			mousePressed = true;
 			mouseMove(event);
-			mouseClick = true;	
-			simUpdate = true;
 		}
 
 		function touchStart(event){
 			mouseDown(event);
-			if(moveParticles){
-			mouseClick = true;	
-			simUpdate = true;
-			}
 		}
 
 		function mouseUp(event){
@@ -117,7 +112,7 @@ var ViewController = function(){
 		theCanvas.addEventListener("touchmove", function(event) { event.preventDefault(); mouseMove(event);},false);
 		theCanvas.addEventListener("touchstart",touchStart,false);
 		theCanvas.addEventListener("touchend",mouseUp,false);
-		//theCanvas.addEventListener("click", mouseClickEH, false);
+		theCanvas.addEventListener("click", mouseClickEH, false);
 		theCanvas.addEventListener("mousemove", mouseMove, false);
 		theCanvas.addEventListener("mousedown", mouseDown, false);
 		theCanvas.addEventListener("mouseup", mouseUp, false);
