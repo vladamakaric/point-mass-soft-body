@@ -81,7 +81,6 @@ var ViewController = function(){
 			var canvPos = findPos(theCanvas);
 			var x = mpos.x-canvPos.x;
 			var y = mpos.y-canvPos.y;
-
 			mousePosition = new Vec2(x,y);
 		}
 
@@ -93,8 +92,11 @@ var ViewController = function(){
 		function touchStart(event){
 			mouseDown(event);
 		}
+
 		function mouseUp(event){
 			mousePressed = false;
+			mouseClick = true;
+			simUpdate = true;
 		}
 	
 		function mouseOut(event){
@@ -108,10 +110,10 @@ var ViewController = function(){
 			mouseMove(event);
 		}
 
-		theCanvas.addEventListener("touchmove", function(event) { event.preventDefault(); mouseMove();},false);
+		theCanvas.addEventListener("touchmove", function(event) { event.preventDefault(); mouseMove(event);},false);
 		theCanvas.addEventListener("touchstart",touchStart,false);
 		theCanvas.addEventListener("touchend",mouseUp,false);
-		theCanvas.addEventListener("click", mouseClickEH, false);
+//		theCanvas.addEventListener("click", mouseClickEH, false);
 		theCanvas.addEventListener("mousemove", mouseMove, false);
 		theCanvas.addEventListener("mousedown", mouseDown, false);
 		theCanvas.addEventListener("mouseup", mouseUp, false);
