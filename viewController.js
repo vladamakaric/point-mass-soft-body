@@ -91,7 +91,6 @@ var ViewController = function(){
 		}
 
 		function touchStart(event){
-			event.preventDefault();
 			mouseDown();
 		}
 		function mouseUp(event){
@@ -105,8 +104,10 @@ var ViewController = function(){
 		function mouseClickEH(event){
 			mouseClick = true;	
 			simUpdate = true;
+			mouseMove(event);
 		}
 
+		theCanvas.addEventListener("touchmove", function(event) { event.preventDefault(); },false);
 		theCanvas.addEventListener("touchstart",touchStart,false);
 		theCanvas.addEventListener("touchmove",mouseMove,false);
 		theCanvas.addEventListener("touchend",mouseUp,false);
