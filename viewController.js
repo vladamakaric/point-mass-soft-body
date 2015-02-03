@@ -43,10 +43,7 @@ var ViewController = function(){
 		form.sps.value = stepsPerSecond;
 		form.dk.value = dampingKoef;
 		form.ek.value = elasticKoef;
-		
-		document.body.addEventListener('touchmove', function(event) {
- 			 event.preventDefault();
-		}, false); 
+
 
 		var rbPos = document.getElementById('rbPos');
 		rbPos.onclick = function(){moveParticles = true;};
@@ -67,16 +64,25 @@ var ViewController = function(){
 			}
 		}
 
+		function findPos(obj) {
+			var curleft = 0, curtop = 0;
+			if (obj.offsetParent) {
+				do {
+					curleft += obj.offsetLeft;
+					curtop += obj.offsetTop;
+				} while (obj = obj.offsetParent);
+				return { x: curleft, y: curtop };
+			}
+			return undefined;
+		}
+
 		function mouseMove(event){
 			var mpos = getMousePos(event);	
-		  var x = mpos.x;
-		  var y = mpos.y;
-          var rect = theCanvas.getBoundingClientRect();
+			var canvPos = findPos(theCanvas);
+			var x = mpos.x-canvPos.x;
+			var y = mpos.y-canvPos.y;
 
-		  x -= rect.left; 
-		  y -= rect.top; 
-
-		  mousePosition = new Vec2(x,y);
+			mousePosition = new Vec2(x,y);
 		}
 
 		function mouseDown(event){
@@ -84,6 +90,10 @@ var ViewController = function(){
 			mouseMove(event);
 		}
 
+		function touchStart(event){
+			event.preventDefault();
+			mouseDown();
+		}
 		function mouseUp(event){
 			mousePressed = false;
 		}
@@ -97,7 +107,7 @@ var ViewController = function(){
 			simUpdate = true;
 		}
 
-		theCanvas.addEventListener("touchstart",mouseDown,false);
+		theCanvas.addEventListener("touchstart",touchStart,false);
 		theCanvas.addEventListener("touchmove",mouseMove,false);
 		theCanvas.addEventListener("touchend",mouseUp,false);
 		theCanvas.addEventListener("click", mouseClickEH, false);
