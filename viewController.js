@@ -86,19 +86,21 @@ var ViewController = function(){
 
 		function mouseUp(event){
 			mousePressed = false;
-			mouseClick = true;
-			simUpdate = true;
-				
+		}
+	
+		function mouseOut(event){
+			mousePressed = false;
 		}
 
-		function mouseOut(event){
-			
-			mousePressed = false;
+		function mouseClickEH(event){
+			mouseClick = true;	
+			simUpdate = true;
 		}
 
 		theCanvas.addEventListener("touchstart",mouseDown,false);
 		theCanvas.addEventListener("touchmove",mouseMove,false);
 		theCanvas.addEventListener("touchend",mouseUp,false);
+		theCanvas.addEventListener("click", mouseClickEH, false);
 		theCanvas.addEventListener("mousemove", mouseMove, false);
 		theCanvas.addEventListener("mousedown", mouseDown, false);
 		theCanvas.addEventListener("mouseup", mouseUp, false);
