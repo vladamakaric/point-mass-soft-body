@@ -63,10 +63,27 @@ var ViewController = function(){
 		rbForce.onclick = onRadioGroupChange;
 		rbForce.checked = true;	
 
+		function getY(event) {
+			if(event.type.contains("touch")) {
+				return event.targetTouches[0].pageY;
+			}
+			else {
+				return event.pageY;
+			}
+		}
+
+		function getX(event) {
+			if(event.type.contains("touch")) {
+				return event.targetTouches[0].pageX;
+			}
+			else {
+				return event.pageX;
+			}
+		}
 
 		function mouseMove(event){
-		  var x = event.clientX;
-		  var y = event.clientY;
+		  var x = getX(event); 
+		  var y = getY(event); 
           var rect = theCanvas.getBoundingClientRect();
 
 		  x -= rect.left; 
