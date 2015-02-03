@@ -91,13 +91,7 @@ var ViewController = function(){
 		}
 
 		function touchStart(event){
-			if(moveParticles){
-
-				mouseClick = true;
-				simUpdate = true;
-
-			}
-			mouseDown();
+			mouseDown(event);
 		}
 		function mouseUp(event){
 			mousePressed = false;
