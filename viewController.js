@@ -1,5 +1,4 @@
 var ViewController = function(){
-
 	var theCanvas; 
 	var form; 
 	var c;
@@ -33,7 +32,6 @@ var ViewController = function(){
 		c = theCanvas.getContext("2d");
 		setUIProperties();
 	}
-
 	
 	var setUIProperties = function(){
 		form.sps.max = maxSPS;
@@ -46,22 +44,18 @@ var ViewController = function(){
 		form.dk.value = dampingKoef;
 		form.ek.value = elasticKoef;
 		
-		var onRadioGroupChange = function (){
-			if(form.clickAction.value === 'pos')
-				moveParticles = true;
-			else
-				moveParticles = false;
-		}
-
-
 		document.body.addEventListener('touchmove', function(event) {
  			 event.preventDefault();
 		}, false); 
 
-		document.getElementById('rbPos').onclick = onRadioGroupChange;
+		var rbPos = document.getElementById('rbPos');
+		rbPos.onclick = function(){moveParticles = true;};
+
 		var rbForce =document.getElementById('rbForce');
-		rbForce.onclick = onRadioGroupChange;
-		rbForce.checked = true;	
+		rbForce.onclick = function(){moveParticles = false;};
+
+		rbForce.checked = !moveParticles;	
+		rbPos.checked = moveParticles;
 
 		function getMousePos(e) {
 
@@ -109,6 +103,7 @@ var ViewController = function(){
 		theCanvas.addEventListener("mousedown", mouseDown, false);
 		theCanvas.addEventListener("mouseup", mouseUp, false);
 		theCanvas.addEventListener ("mouseout", mouseOut, false);
+
 		form.sps.oninput = function(){
 			stepsPerSecond = form.sps.value;
 		}
@@ -144,14 +139,12 @@ var ViewController = function(){
 	}
 
 	var updateSimulation=function(){
-
 		if(mouseClick){
 			mouseClick = false;
 			if(moveParticles){
 				simulation.moveParticles(mousePosition);
 			}
 		}
-
 
 		if(resetShape){
 			resetShape = false;
@@ -174,7 +167,6 @@ var ViewController = function(){
 
 	this.setSimulation = function(simul) { 
 		simulation = simul;
-
 		form.shapeSelect.value = '1';
 		form.intgr.value = '3';
 		simulation.changeIntegrator(3);
