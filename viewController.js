@@ -65,8 +65,10 @@ var ViewController = function(){
 		function mouseMove(event){
 		  var x = event.clientX;
 		  var y = event.clientY;
-		  x -= theCanvas.offsetLeft;
-		  y -= theCanvas.offsetTop;
+          var rect = theCanvas.getBoundingClientRect();
+
+		  x -= rect.left; 
+		  y -= rect.top; 
 
 		  mousePosition = new Vec2(x,y);
 		}

@@ -3,7 +3,6 @@ var MODEL = (function(pi) {
 	pi.Simulation = function(width,height){
 		var running = false;
 		var particleEnvelope = null;
-		var innerSpringPairs = null;
 
 		var forceGenerators =[];
 		var particles =[];
@@ -245,7 +244,7 @@ var MODEL = (function(pi) {
 		}
 
 		var hexagon = function() { circleCreator(6,70, [], 122, 10, 122, 7); } 
-		var circle = function() { circleCreator(24, 70, [2, 4], 30, 10, 40, 7); }
+		var circle = function() { circleCreator(24, 70, [2, 4], 30, 10, 20, 7); }
 
 		var circleCreator = function(num, r, supportStringIntervals, ekfCenter, dkfCenter, ekfPerim, dkfPerim) {
 			var dangle = Math.PI*2/num;
