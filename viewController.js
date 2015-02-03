@@ -53,9 +53,6 @@ var ViewController = function(){
 				moveParticles = false;
 		}
 
-		theCanvas.addEventListener('touchmove', function(event) {
-		  touches = event.touches;
-		}, false);
 
 		document.body.addEventListener('touchmove', function(event) {
  			 event.preventDefault();
@@ -66,11 +63,6 @@ var ViewController = function(){
 		rbForce.onclick = onRadioGroupChange;
 		rbForce.checked = true;	
 
-		function mouseClickEH(event)
-		{
-		  mouseClick = true;
-		  simUpdate = true;
-		} 
 
 		function mouseMove(event){
 		  var x = event.clientX;
@@ -85,18 +77,28 @@ var ViewController = function(){
 
 		function mouseDown(event){
 			mousePressed = true;
-
-
+			mouseMove(event);
 		}
+
 		function mouseUp(event){
+			mousePressed = false;
+			mouseClick = true;
+			simUpdate = true;
+				
+		}
+
+		function mouseOut(event){
+			
 			mousePressed = false;
 		}
 
-		theCanvas.addEventListener("click", mouseClickEH, false);
+		theCanvas.addEventListener("touchstart",mouseDown,false);
+		theCanvas.addEventListener("touchmove",mouseMove,false);
+		theCanvas.addEventListener("touchend",mouseUp,false);
 		theCanvas.addEventListener("mousemove", mouseMove, false);
 		theCanvas.addEventListener("mousedown", mouseDown, false);
 		theCanvas.addEventListener("mouseup", mouseUp, false);
-		theCanvas.addEventListener ("mouseout", mouseUp, false);
+		theCanvas.addEventListener ("mouseout", mouseOut, false);
 		form.sps.oninput = function(){
 			stepsPerSecond = form.sps.value;
 		}
@@ -171,9 +173,6 @@ var ViewController = function(){
 
 	this.render = function(){
 		c.clearRect(0,0, theCanvas.width, theCanvas.height);
-
-		if(touches.length>0)
-			alert(touches.x);
 
 		if(simUpdate === true){
 			updateSimulation();
