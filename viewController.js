@@ -43,7 +43,6 @@ var ViewController = function(){
 		form.sps.value = stepsPerSecond;
 		form.dk.value = dampingKoef;
 		form.ek.value = elasticKoef;
-		form.clickAction.value = 'force';
 		
 		var onRadioGroupChange = function (){
 			if(form.clickAction.value === 'pos')
@@ -52,9 +51,11 @@ var ViewController = function(){
 				moveParticles = false;
 		}
 
-		document.getElementById('rbPos').onclick = onRadioGroupChange;
-		document.getElementById('rbForce').onclick = onRadioGroupChange;
 		
+		document.getElementById('rbPos').onclick = onRadioGroupChange;
+		var rbForce =document.getElementById('rbForce');
+		rbForce.onclick = onRadioGroupChange;
+		rbForce.checked = true;	
 
 		function mouseClickEH(event)
 		{
