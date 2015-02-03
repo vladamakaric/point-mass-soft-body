@@ -64,7 +64,7 @@ var ViewController = function(){
 		rbForce.checked = true;	
 
 		function getY(event) {
-			if(event.type.contains("touch")) {
+			if(event.targetTouches) {
 				return event.targetTouches[0].pageY;
 			}
 			else {
@@ -73,7 +73,7 @@ var ViewController = function(){
 		}
 
 		function getX(event) {
-			if(event.type.contains("touch")) {
+			if(event.targetTouches) {
 				return event.targetTouches[0].pageX;
 			}
 			else {
