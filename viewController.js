@@ -103,7 +103,6 @@ var ViewController = function(){
 		}
 
 		function mouseClickEH(event){
-			mouseDown = true;
 			mouseClick = true;	
 			simUpdate = true;
 			mouseMove(event);
