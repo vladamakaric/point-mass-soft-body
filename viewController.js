@@ -174,11 +174,10 @@ var ViewController = function(){
 		var  penvlp= simulation.getParticleEnvelope();
 
 		c.beginPath();
-		c.moveTo(penvlp[0].position.x, penvlp[0].position.y); 
-		for(var i = 1; i<penvlp.length; i++){
-			c.lineTo(	penvlp[i].position.x, penvlp[i].position.y);
+		for(var i = 0; i<penvlp.length-1; i=i+2){
+			c.moveTo(penvlp[i].position.x, penvlp[i].position.y); 
+			c.lineTo(penvlp[i+1].position.x, penvlp[i+1].position.y);
 		}
-		c.lineTo(penvlp[0].position.x, penvlp[0].position.y); 
 
 		c.strokeStyle = '#44C400';
 		c.lineWidth = 3;

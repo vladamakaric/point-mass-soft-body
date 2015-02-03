@@ -45,6 +45,11 @@ var MODEL = (function(pi) {
 			if(!running) return;
 			
 			integrator(dt);
+
+			//air drag
+			particles.forEach(function(e){
+				e.velocity = e.velocity.mulS(0.99);
+			});
 			clearForces();
 			collisionDetection();
 		}
@@ -77,7 +82,6 @@ var MODEL = (function(pi) {
 					e.elasticKoef *= elasticM;
 					e.dampingKoef *= dampingM;
 
-					console.log('e' + e.elasticKoef + 'd' + e.dampingKoef);
 					e.applyForce();
 
 					e.elasticKoef = oldEK;
@@ -156,6 +160,8 @@ var MODEL = (function(pi) {
 				particles[i].position = t0Particles[i].position.addV(dv); 
 				particles[i].velocity = t0Particles[i].velocity.addV(da);
 			}
+
+
 		}
 
 		var saveCurrentDerivs = function(k) {
@@ -207,20 +213,50 @@ var MODEL = (function(pi) {
 			});
 		}
 
-		var circle = function(){
-			var num = 14;
-			var dangle = Math.PI*2/num;
-			var r = 70;
+		var rope = function(){
+		
+			var anchorPosition = new Vec2(width/2,50);
+			var anchorP = new MODEL.Particle(0, anchorPosition);
 
-			var centerPcl =new MODEL.Particle(0.2, new Vec2(0,0)); 
-			particles = [centerPcl]; 
+			var linkNum = 5;
+			var chainLenght = 160;
 
+			var linkLenght = chainLenght/linkNum;
+
+			var prevP = anchorP;
+			particles = [anchorP];
 			forceGenerators = [];
+
+			particleEnvelope = [];
+			for(var i=0; i<linkNum; i++){
+				var newP = new MODEL.Particle(1, new Vec2(anchorPosition.x, anchorPosition.y + (i+1)*linkLenght));
+				var newSpring = new MODEL.SpringFG(prevP, newP, 7.2,15);
+
+				particles.push(newP);
+				forceGenerators.push(newSpring);
+
+				particleEnvelope.push(prevP);
+				particleEnvelope.push(newP);
+				prevP = newP;
+			}
+
+			var gravityFG = new MODEL.GravityFG(particles);
+			forceGenerators.push(gravityFG);
+		}
+
+		var hexagon = function() { circleCreator(6,70, [], 122, 10, 122, 7); } 
+		var circle = function() { circleCreator(24, 70, [2, 4], 30, 10, 40, 7); }
+
+		var circleCreator = function(num, r, supportStringIntervals, ekfCenter, dkfCenter, ekfPerim, dkfPerim) {
+			var dangle = Math.PI*2/num;
+			var centerPcl =new MODEL.Particle(0.2, new Vec2(0,0)); 
+
+			particles = [centerPcl]; 
+			
+			forceGenerators = [];
+			particleEnvelope = [];
 			var prevPcl = null; 
-			var dkfCenter = 10;
-			var ekfCenter = 222;
-			var dkfPerim = 7;
-			var ekfPerim = 370;
+
 			for(var i=0; i<num; i++){
 				
 				var pcl = new MODEL.Particle(1,	new Vec2(
@@ -234,20 +270,35 @@ var MODEL = (function(pi) {
 				if(prevPcl!=null){
 					var spring = new MODEL.SpringFG(prevPcl, pcl, ekfPerim,dkfPerim);
 					forceGenerators.push(spring);
+					
+					particleEnvelope.push(prevPcl);
+					particleEnvelope.push(pcl);
 				}
 
+				
 				prevPcl = pcl;
 			}
 			
+			particleEnvelope.push(particles[1]);
+			particleEnvelope.push(particles[num]);
+
 			var spring = new MODEL.SpringFG(particles[1], particles[num], ekfPerim,dkfPerim);
 			forceGenerators.push(spring);
-		
+	
+			supportStringIntervals.forEach(function(interval){
+				for(var i=0; i<num;i++){
+					var prtkl1 = particles[i+1];
+					var prtkl2 = particles[(i+interval)%num + 1];
+					
+					var spring = new MODEL.SpringFG(prtkl1, prtkl2, ekfPerim,dkfPerim);
+					forceGenerators.push(spring);
+				}
+			});
+			
 			moveParticleCM(new Vec2(width/2, height/2));
 		
 			var gravityFG = new MODEL.GravityFG(particles);
 			forceGenerators.push(gravityFG);
-
-			particleEnvelope = particles.slice(1,particles.length);
 		}
 
 		var square = function(){
@@ -269,10 +320,14 @@ var MODEL = (function(pi) {
 				}
 			}
 
-			particleEnvelope = particles;
+			particleEnvelope = [];
+			for(var i = 0; i<particles.length; i++){
+				particleEnvelope.push(particles[i]);
+				particleEnvelope.push(particles[(i+1)%particles.length]);
+			}
 		}
 
-		shapeCreatorArray = [square, circle, shapeC1];
+		shapeCreatorArray = [square, hexagon, circle, rope];
 		integratorArray = [euler, RK2, RK4];
 
 		var collisionDetection = function(){
