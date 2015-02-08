@@ -6,11 +6,11 @@ var ViewController = function(){
 
 	var maxKoef = 1000;
 	var minKoef = 1;
-	var koefScaleF =1/140; 
+	var koefScaleF =1/400; 
 
 	var minSPS = 1;
 	var maxSPS = 100;
-	var stepsPerSecond = 30;
+	var stepsPerSecond = 40;
 
 	var elasticKoef = 500;
 	var dampingKoef = 500;
