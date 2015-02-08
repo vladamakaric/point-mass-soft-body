@@ -10,7 +10,7 @@ var ViewController = function(){
 
 	var minSPS = 1;
 	var maxSPS = 100;
-	var stepsPerSecond = 40;
+	var timeStepSize= 1/40;
 
 	var elasticKoef = 500;
 	var dampingKoef = 500;
@@ -41,7 +41,7 @@ var ViewController = function(){
 		form.dk.max = maxKoef;
 		form.ek.min = minKoef;
 		form.ek.max = maxKoef;
-		form.sps.value = stepsPerSecond;
+		form.sps.value = Math.floor(1/timeStepSize);
 		form.dk.value = dampingKoef;
 		form.ek.value = elasticKoef;
 
@@ -118,7 +118,8 @@ var ViewController = function(){
 		theCanvas.addEventListener ("mouseout", mouseOut, false);
 
 		form.sps.oninput = function(){
-			stepsPerSecond = form.sps.value;
+			
+			timeStepSize= 1/(maxSPS-form.sps.value+1);
 		}
 		
 		form.dk.oninput = function(){
@@ -197,7 +198,7 @@ var ViewController = function(){
 			var force = mousePosition.subV(simulation.getParticlesCM());
 			simulation.applyForceToShape(force);
 		}
-		simulation.iterate(1/stepsPerSecond);
+		simulation.iterate(timeStepSize);
 
 		var  penvlp= simulation.getParticleEnvelope();
 
