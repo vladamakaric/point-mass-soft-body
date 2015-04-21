@@ -1,3 +1,17 @@
+form div{
+	vertical-align: middle;
+	text-align: center;
+	margin: 5px;
+}
+
+form div div {
+	text-align: left;
+	height: 50px;
+	margin: 10px;
+	width: auto;
+	display: inline-block;
+}
+
 h1, h2 {
 text-align: center;
 color: #2C2C2C;
@@ -6,8 +20,8 @@ color: #2C2C2C;
 p {
 	text-align: center;
 	font-size:small;
-
 }
+
 #center {
     margin-left: auto;
     margin-right: auto;
@@ -23,30 +37,8 @@ p {
     display: block;
 }
 
-
-button{
-    height:40px; 
-	margin: 5px auto;
-    width:120px; 
-}
- 
 #myForm {
 	padding: 10px;
 }
 
-form div{
-	vertical-align: middle;
-	text-align: center;
-	height: 60px;
-	margin: 2 auto;
-}
-
-form div div {
-	padding: 0px 10px;
-	text-align: left;
-	height: 50px;
-	margin: 0 auto;
-	width: auto;
-	display: inline-block;
-}
 

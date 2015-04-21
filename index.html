@@ -18,13 +18,13 @@
 				<div>
 					<div>
 						 <button type="button" name = "togglePause" >Toggle Pause</button>
-					</div>
+					 </div>
 					<div>
 						 <button type="button" name = "resetShape" >Reset shape</button>
-					</div>
+					 </div>
+
 					<div>
 						Shape:
-						<br>
 						<select name="shapeSelect">
 						<option value="1">Square</option>
 						<option value="2">Hexagon</option>
@@ -32,9 +32,9 @@
 						<option value="4">Rope</option>
 						</select>
 					</div>
+
 					<div> 
 						Integrator:
-						<br>
 						<select name="intgr">
 						<option value="1">Euler</option>
 						<option value="2">RK2</option>
@@ -42,6 +42,7 @@
 						</select>
 					</div>
 				</div>
+
 				<div>
 					<div>
 					  Elasticity:
@@ -60,10 +61,12 @@
 						<input type="range" name="sps" min="1" max="100">	
 					</div>	
 				</div>
+
 				<div>
-					Click behavior:
-					<input type="radio" name="clickAction" value="pos" id = 'rbPos' >Change position
-					<input type="radio" name="clickAction" value="force" id = 'rbForce' >Apply force
+					<div>Click behavior:</div>
+
+					<div><input type="radio" name="clickAction" value="pos" id = 'rbPos' >Change position</div>
+					<div><input type="radio" name="clickAction" value="force" id = 'rbForce' >Apply force</div>
 				</div>
 
 				<footer>
