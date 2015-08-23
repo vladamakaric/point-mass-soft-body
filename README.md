@@ -4,4 +4,6 @@
 
 Soft body dynamics in HTML5.
 
-Project for a course in numerical algorithms and numerical software at my university.  
+Extra credit project for a course in numerical algorithms and numerical software at my university.  
+
+Online interactive simulation: http://vladamakaric.github.io/point-mass-soft-body/
