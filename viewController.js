@@ -180,10 +180,10 @@ var ViewController = function(){
 
 	this.setSimulation = function(simul) { 
 		simulation = simul;
-		form.shapeSelect.value = '1';
+		form.shapeSelect.value = '3';
 		form.intgr.value = '3';
 		simulation.changeIntegrator(3);
-		simulation.changeShapeCreator(1);
+		simulation.changeShapeCreator(3);
 	};
 
 	this.render = function(){
